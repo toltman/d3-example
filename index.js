@@ -48,6 +48,26 @@ d3.csv("data.csv").then((data) => {
   d3.select("#container")
     .append("p")
     .text(`The average weight is ${avgWeight}`);
+
+  // min and max
+  minHeight = bmiData.reduce(
+    (acc, d) => (Number(d.Height) < acc ? Number(d.Height) : acc),
+    Infinity
+  );
+  d3.select("#container")
+    .append("p")
+    .text(`The minimum height is ${minHeight}`);
+
+  maxBMI = d3.max(bmiData, (d) => d.BMI);
+  d3.select("#container").append("p").text(`The maximum BMI is ${maxBMI}`);
+
+  // Using d3.extent
+  weightExtent = d3.extent(bmiData, (d) => Number(d.Weight));
+  d3.select("#container")
+    .append("p")
+    .text(
+      `The min weight is ${weightExtent[0]}, the max weight is ${weightExtent[1]}`
+    );
 });
 
 function calcAvg(data, colName) {
