@@ -23,6 +23,38 @@ d3.csv("data.csv").then((data) => {
   createTable(sortedData);
 });
 
+// Using array.map
+d3.csv("data.csv").then((data) => {
+  // create a new variable
+  var bmiData = data.map((d) => {
+    return {
+      ...d,
+      BMI: d.Height * d.Weight,
+    };
+  });
+
+  bmiData.columns = [...data.columns, "BMI"];
+  createTable(bmiData);
+
+  // Using array.reduce
+  // Calculate average Height and Weight
+  avgHeight = calcAvg(bmiData, "Height");
+  d3.select("#container")
+    .append("p")
+    .text(`The average height is ${avgHeight}`);
+
+  // average Weight
+  avgWeight = calcAvg(bmiData, "Weight");
+  d3.select("#container")
+    .append("p")
+    .text(`The average weight is ${avgWeight}`);
+});
+
+function calcAvg(data, colName) {
+  avg = data.reduce((acc, d) => acc + Number(d[colName]), 0) / data.length;
+  return avg;
+}
+
 function createTable(data) {
   // create table and header row
   let table = d3.select("#container").append("table");
